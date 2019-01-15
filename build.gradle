@@ -7,6 +7,7 @@ plugins {
 
 ext {
   grailsCoreBranch = '3.3.x'
+  angularProfileBranch = '6.1.x'
   profilesSlug = 'grails-profiles'
   profiles = [
           'base',
@@ -39,8 +40,15 @@ task cloneGrailsCore {
 task cloneProfiles {
   doLast() {
     profiles.each { String profile ->
-      def grgit = Grgit.clone(dir: "${buildDir}/${profile}".toString(),
-              uri: "https://github.com/${profilesSlug}/${profile}.git")
+      if (profile == 'angular') {
+        def grgit = Grgit.clone(dir: "${buildDir}/${profile}".toString(),
+                uri: "https://github.com/${profilesSlug}/${profile}.git", refToCheckout: angularProfileBranch)
+
+      } else {
+        def grgit = Grgit.clone(dir: "${buildDir}/${profile}".toString(),
+                uri: "https://github.com/${profilesSlug}/${profile}.git")
+      }
+
     }
   }
 }
